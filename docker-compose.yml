@@ -6,6 +6,8 @@ services:
     image: postgres:15-alpine
     container_name: todo_postgres_db
     restart: always
+    env_file:
+        - .env
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
@@ -30,9 +32,8 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    environment:
-      # We use 'db' (the service name) as the hostname instead of 'localhost'
-      DATABASE_URL: postgresql://myuser:mypassword@db:5432/todo_db
+    env_file:
+        - .env
     depends_on:
       db:
         condition: service_healthy
