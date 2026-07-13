@@ -56,36 +56,45 @@ export default function App() {
   };
 
   return (
-    <div style={{ maxWidth: '500px', margin: '50px auto', padding: '20px', fontFamily: 'sans-serif' }}>
-      <h2>FastAPI + React Todo App</h2>
+    <div className="mx-20 mt-12 p-6 bg-slate-200 rounded-xl shadow-md font-sans">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">FastAPI + React Todo App</h2>
       
-      <form onSubmit={addTodo} style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+      <form onSubmit={addTodo} className="flex gap-2 mb-6">
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="What needs to be done?"
-          style={{ flexGrow: 1, padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+          className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
         />
-        <button type="submit" style={{ padding: '8px 12px', background: '#0070f3', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+        <button 
+          type="submit" 
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center cursor-pointer"
+        >
           <Plus size={18} />
         </button>
       </form>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <ul className="divide-y divide-gray-100">
         {todos.map((todo) => (
-          <li key={todo.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px', borderBottom: '1px solid #eee' }}>
-            <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1, cursor: 'pointer' }} onClick={() => toggleTodo(todo.id)}>
+          <li key={todo.id} className="flex items-center justify-between py-3 group">
+            <div 
+              className="flex items-center flex-grow cursor-pointer select-none" 
+              onClick={() => toggleTodo(todo.id)}
+            >
               {todo.completed ? (
-                <CheckCircle size={20} color="green" style={{ marginRight: '10px' }} />
+                <CheckCircle size={20} className="text-green-500 mr-3 shrink-0" />
               ) : (
-                <Circle size={20} color="#ccc" style={{ marginRight: '10px' }} />
+                <Circle size={20} className="text-gray-400 mr-3 shrink-0 group-hover:text-gray-600" />
               )}
-              <span style={{ textDecoration: todo.completed ? 'line-through' : 'none', color: todo.completed ? '#888' : '#000' }}>
+              <span className={`text-base transition-all ${todo.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
                 {todo.title}
               </span>
             </div>
-            <button onClick={() => deleteTodo(todo.id)} style={{ background: 'none', border: 'none', color: '#ff4d4d', cursor: 'pointer' }}>
+            <button 
+              onClick={() => deleteTodo(todo.id)} 
+              className="p-1 text-gray-400 hover:text-red-500 rounded transition-colors cursor-pointer"
+            >
               <Trash2 size={18} />
             </button>
           </li>
