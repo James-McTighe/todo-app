@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Container
+  db:
+    image: postgres:15-alpine
+    container_name: todo_postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: todo_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. FastAPI Backend Container
+  backend:
+    build: ./backend
+    container_name: todo_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      # We use 'db' (the service name) as the hostname instead of 'localhost'
+      DATABASE_URL: postgresql://myuser:mypassword@db:5432/todo_db
+    depends_on:
+      - db
+
+  # 3. React Frontend Container
+  frontend:
+    build: ./frontend
+    container_name: todo_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
