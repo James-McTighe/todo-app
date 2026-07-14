@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, CheckCircle, Circle, Plus, Edit2, X } from 'lucide-react';
+import EditModal from './components/EditTask';
 
 const API_URL = 'http://localhost:8000/todos';
 
 export default function App() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
-  
+
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTodo, setEditingTodo] = useState(null);
@@ -85,7 +86,7 @@ export default function App() {
   return (
     <div className="max-w-2xl mx-auto mt-12 p-6 bg-white rounded-xl shadow-md font-sans">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">FastAPI + React Todo App</h2>
-      
+
       <form onSubmit={addTodo} className="flex gap-2 mb-6">
         <input
           type="text"
@@ -125,7 +126,7 @@ export default function App() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => handleEditClick(todo)} className="p-1.5 text-gray-400 hover:text-blue-500 rounded hover:bg-gray-50 cursor-pointer">
                   <Edit2 size={18} />
@@ -144,99 +145,7 @@ export default function App() {
         ))}
       </ul>
 
-      {/* --- EDIT MODAL OVERLAY --- */}
-      {isModalOpen && editingTodo && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-150">
-            <button 
-              onClick={() => setIsModalOpen(false)} 
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 cursor-pointer"
-            >
-              <X size={20} />
-            </button>
-            
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Edit Task Details</h3>
-            
-            <form onSubmit={saveUpdatedTodo} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Task Title</label>
-                <input
-                  type="text"
-                  value={editingTodo.title}
-                  onChange={(e) => setEditingTodo({ ...editingTodo, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Status</label>
-                  <select
-                    value={editingTodo.status}
-                    onChange={(e) => setEditingTodo({ ...editingTodo, status: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="To Do">To Do</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Done">Done</option>
-                  </select>
-                </div>
-
-                <div className="flex items-end pb-2">
-                  <label className="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={editingTodo.completed}
-                      onChange={(e) => setEditingTodo({ ...editingTodo, completed: e.target.checked })}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
-                    />
-                    <span>Mark Completed</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Blockers</label>
-                <input
-                  type="text"
-                  value={editingTodo.blockers || ''}
-                  onChange={(e) => setEditingTodo({ ...editingTodo, blockers: e.target.value })}
-                  placeholder="Any dependencies or blocking issues?"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Notes</label>
-                <textarea
-                  value={editingTodo.notes || ''}
-                  onChange={(e) => setEditingTodo({ ...editingTodo, notes: e.target.value })}
-                  placeholder="Additional contexts..."
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 cursor-pointer"
-                  >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <EditModal onClose={saveUpdatedTodo} isOpen={isModalOpen} todo={editingTodo} />
     </div>
   );
 }
