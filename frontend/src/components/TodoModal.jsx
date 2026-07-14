@@ -9,11 +9,11 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
 
   return (
     <div 
-      className="fixed inset-0 flex items-center justify-center z-50 p-4 translate-x-100"
+      className="fixed inset-0 flex items-center justify-center z-50 p-4 translate-x-120"
       onClick={onClose}
     >
       <div 
-        className="bg-white border border-blue-500 rounded-xl shadow-xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-150"
+        className="bg-white w-200 border border-blue-500 rounded-xl shadow-xl p-6 relative animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()} // Prevents accidental closing when clicking inside form
       >
         <button 
@@ -29,7 +29,7 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
         
         <form onSubmit={onSave} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Task Title</label>
+            <label className="block text-xs font-semibold text-gray-800 uppercase tracking-wider mb-1">Task Title</label>
             <input
               type="text"
               value={todo.title || ''}
@@ -42,7 +42,7 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Status</label>
+              <label className="block text-xs font-semibold text-gray-800 uppercase tracking-wider mb-1">Status</label>
               <select
                 value={todo.status || 'To Do'}
                 onChange={(e) => onChange({ ...todo, status: e.target.value })}
@@ -70,7 +70,7 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Blockers</label>
+            <label className="block text-xs font-semibold text-gray-800 uppercase tracking-wider mb-1">Blockers</label>
             <input
               type="text"
               value={todo.blockers || ''}
@@ -81,13 +81,13 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Notes</label>
+            <label className="block text-xs font-semibold text-gray-800 uppercase tracking-wider mb-1">Notes</label>
             <textarea
               value={todo.notes || ''}
               onChange={(e) => onChange({ ...todo, notes: e.target.value })}
               placeholder="Additional contexts..."
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full h-50 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             />
           </div>
 
