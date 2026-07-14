@@ -9,11 +9,11 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 flex items-center justify-center z-50 p-4 translate-x-100"
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-150"
+        className="bg-white border border-blue-500 rounded-xl shadow-xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()} // Prevents accidental closing when clicking inside form
       >
         <button 
