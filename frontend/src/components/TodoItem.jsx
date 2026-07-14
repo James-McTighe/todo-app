@@ -1,5 +1,4 @@
-import React from 'react';
-import { Trash2, CheckCircle, Circle, Edit2 } from 'lucide-react';
+import { Trash2, Edit2 } from 'lucide-react';
 
 // Status color configuration (from your previous dynamic color setup)
 const STATUS_COLORS = {
@@ -35,7 +34,7 @@ const STATUS_COLORS = {
   }
 };
 
-export default function TodoItem({ todo, onEditClick, onToggleComplete, onDelete }) {
+export default function TodoItem({ todo, onEditClick, onDelete }) {
   // Fetch styling based on the status
   const colors = STATUS_COLORS[todo.status] || STATUS_COLORS['To Do'];
 
