@@ -103,12 +103,7 @@ export default function App() {
         {todos.map((todo) => (
           <li key={todo.id} className="flex flex-col py-4 group">
             <div className="flex items-center justify-between">
-              <div className="flex items-center flex-grow cursor-pointer" onClick={() => quickToggleComplete(todo)}>
-                {todo.completed ? (
-                  <CheckCircle size={20} className="text-green-500 mr-3 shrink-0" />
-                ) : (
-                  <Circle size={20} className="text-gray-400 mr-3 shrink-0" />
-                )}
+              <div className="flex items-center flex-grow cursor-pointer">
                 <div>
                   <span className={`text-base font-medium ${todo.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
                     {todo.title}
