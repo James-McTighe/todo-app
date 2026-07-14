@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, CheckCircle, Circle, Plus, Edit2, X } from 'lucide-react';
-import EditModal from './components/EditTask';
+import { Trash2, CheckCircle, Circle, Plus, Edit2 } from 'lucide-react';
+import TodoModal from './components/TodoModal'; // Import the new modal component
 
 const API_URL = 'http://localhost:8000/todos';
 
+// Blank template state for establishing new todo structures
+const initialTodoState = { title: '', status: 'To Do', blockers: '', notes: '', completed: false };
+
 export default function App() {
   const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState('');
-
-  // Modal State
+  
+  // Unified Modal Management State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTodo, setEditingTodo] = useState(null);
+  const [activeTodo, setActiveTodo] = useState(null);
 
   useEffect(() => {
     fetch(API_URL)
@@ -19,43 +21,45 @@ export default function App() {
       .catch((err) => console.error("Error fetching todos:", err));
   }, []);
 
-  const addTodo = async (e) => {
-    e.preventDefault();
-    if (!newTodo.trim()) return;
-
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: newTodo, status: 'To Do', blockers: '', notes: '' }),
-      });
-      const data = await res.json();
-      setTodos([...todos, data]);
-      setNewTodo('');
-    } catch (err) {
-      console.error("Error adding todo:", err);
-    }
-  };
-
-  const handleEditClick = (todo) => {
-    setEditingTodo({ ...todo });
+  // Open modal in creation mode
+  const handleAddClick = () => {
+    setActiveTodo({ ...initialTodoState });
     setIsModalOpen(true);
   };
 
-  const saveUpdatedTodo = async (e) => {
+  // Open modal in update mode
+  const handleEditClick = (todo) => {
+    setActiveTodo({ ...todo });
+    setIsModalOpen(true);
+  };
+
+  // Unified Save Operation (Handles both POST and PUT methods)
+  const handleSaveTodo = async (e) => {
     e.preventDefault();
+    if (!activeTodo.title.trim()) return;
+
+    const isEditing = !!activeTodo.id;
+    const url = isEditing ? `${API_URL}/${activeTodo.id}` : API_URL;
+    const method = isEditing ? 'PUT' : 'POST';
+
     try {
-      const res = await fetch(`${API_URL}/${editingTodo.id}`, {
-        method: 'PUT',
+      const res = await fetch(url, {
+        method: method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editingTodo),
+        body: JSON.stringify(activeTodo),
       });
-      const updated = await res.json();
-      setTodos(todos.map((t) => (t.id === editingTodo.id ? updated : t)));
+      const data = await res.json();
+
+      if (isEditing) {
+        setTodos(todos.map((t) => (t.id === activeTodo.id ? data : t)));
+      } else {
+        setTodos([...todos, data]);
+      }
+
       setIsModalOpen(false);
-      setEditingTodo(null);
+      setActiveTodo(null);
     } catch (err) {
-      console.error("Error updating todo:", err);
+      console.error(`Error saving todo via ${method}:`, err);
     }
   };
 
@@ -86,19 +90,17 @@ export default function App() {
   return (
     <div className="max-w-2xl mx-auto mt-12 p-6 bg-white rounded-xl shadow-md font-sans">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">FastAPI + React Todo App</h2>
-
-      <form onSubmit={addTodo} className="flex gap-2 mb-6">
-        <input
-          type="text"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Add a new task..."
-          className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center cursor-pointer">
+      
+      {/* Replaced top input bar with a clean trigger button */}
+      <div className="mb-6 flex justify-end">
+        <button 
+          onClick={handleAddClick} 
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 cursor-pointer transition-colors"
+        >
           <Plus size={18} />
+          <span>Add New Task</span>
         </button>
-      </form>
+      </div>
 
       <ul className="divide-y divide-gray-100">
         {todos.map((todo) => (
@@ -126,7 +128,7 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
+              
               <div className="flex gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => handleEditClick(todo)} className="p-1.5 text-gray-400 hover:text-blue-500 rounded hover:bg-gray-50 cursor-pointer">
                   <Edit2 size={18} />
@@ -137,7 +139,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Micro details row */}
             {todo.notes && (
               <p className="text-xs text-gray-500 mt-2 pl-8 italic line-clamp-1">{todo.notes}</p>
             )}
@@ -145,7 +146,14 @@ export default function App() {
         ))}
       </ul>
 
-      <EditModal onClose={saveUpdatedTodo} isOpen={isModalOpen} todo={editingTodo} />
+      {/* Extracted Global Todo Management Modal Component */}
+      <TodoModal 
+        isOpen={isModalOpen}
+        todo={activeTodo}
+        onClose={() => { setIsModalOpen(false); setActiveTodo(null); }}
+        onChange={setActiveTodo}
+        onSave={handleSaveTodo}
+      />
     </div>
   );
 }

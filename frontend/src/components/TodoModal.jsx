@@ -1,29 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Trash2, CheckCircle, Circle, Plus, Edit2, X } from 'lucide-react';
+import React from 'react';
+import { X } from 'lucide-react';
 
-const EditModal = ({ isOpen, onClose, todo }) => {
-  if ( !isOpen ) return null;
+export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
+  if (!isOpen || !todo) return null;
+
+  // Determine if we are creating a new task or editing an existing one
+  const isEditing = !!todo.id; 
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-150">
-        <button
-          onClick={() => onClose()}
+    <div 
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-150"
+        onClick={(e) => e.stopPropagation()} // Prevents accidental closing when clicking inside form
+      >
+        <button 
+          onClick={onClose} 
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 cursor-pointer"
         >
           <X size={20} />
         </button>
-
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Edit Task Details</h3>
-
-        <form onSubmit={onClose} className="space-y-4">
+        
+        <h3 className="text-lg font-bold text-gray-900 mb-4">
+          {isEditing ? 'Edit Task Details' : 'Add New Task'}
+        </h3>
+        
+        <form onSubmit={onSave} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Task Title</label>
             <input
               type="text"
-              value={todo.title}
-              onChange={(e) => setEditingTodo({ ...todo, title: e.target.value })}
+              value={todo.title || ''}
+              onChange={(e) => onChange({ ...todo, title: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="What needs to be done?"
               required
             />
           </div>
@@ -32,8 +44,8 @@ const EditModal = ({ isOpen, onClose, todo }) => {
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Status</label>
               <select
-                value={todo.status}
-                onChange={(e) => setEditingTodo({ ...todo, status: e.target.value })}
+                value={todo.status || 'To Do'}
+                onChange={(e) => onChange({ ...todo, status: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="To Do">To Do</option>
@@ -46,8 +58,8 @@ const EditModal = ({ isOpen, onClose, todo }) => {
               <label className="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer select-none">
                 <input
                   type="checkbox"
-                  checked={todo.completed}
-                  onChange={(e) => setEditingTodo({ ...todo, completed: e.target.checked })}
+                  checked={todo.completed || false}
+                  onChange={(e) => onChange({ ...todo, completed: e.target.checked })}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
                 />
                 <span>Mark Completed</span>
@@ -60,7 +72,7 @@ const EditModal = ({ isOpen, onClose, todo }) => {
             <input
               type="text"
               value={todo.blockers || ''}
-              onChange={(e) => setEditingTodo({ ...todo, blockers: e.target.value })}
+              onChange={(e) => onChange({ ...todo, blockers: e.target.value })}
               placeholder="Any dependencies or blocking issues?"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -70,7 +82,7 @@ const EditModal = ({ isOpen, onClose, todo }) => {
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Notes</label>
             <textarea
               value={todo.notes || ''}
-              onChange={(e) => setEditingTodo({ ...todo, notes: e.target.value })}
+              onChange={(e) => onChange({ ...todo, notes: e.target.value })}
               placeholder="Additional contexts..."
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
@@ -80,7 +92,7 @@ const EditModal = ({ isOpen, onClose, todo }) => {
           <div className="flex justify-end gap-2 pt-2">
             <button
               type="button"
-              onClick={() => setIsModalOpen(false)}
+              onClick={onClose}
               className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 cursor-pointer"
             >
               Cancel
@@ -89,13 +101,11 @@ const EditModal = ({ isOpen, onClose, todo }) => {
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer"
             >
-              Save Changes
+              {isEditing ? 'Save Changes' : 'Create Task'}
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }
-
-export default EditModal;
