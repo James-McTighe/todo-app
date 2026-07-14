@@ -88,7 +88,7 @@ export default function App() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-12 p-6 bg-white rounded-xl shadow-md font-sans">
+    <div className="max-w-2xl mx-auto mt-12 p-6 bg-slate-100 rounded-xl shadow-md font-sans">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">FastAPI + React Todo App</h2>
       
       {/* Replaced top input bar with a clean trigger button */}
@@ -104,7 +104,7 @@ export default function App() {
 
       <ul className="divide-y divide-gray-100">
         {todos.map((todo) => (
-          <li key={todo.id} className="flex flex-col py-4 group">
+          <li key={todo.id} className="flex flex-col py-4 group rounded-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center flex-grow cursor-pointer" onClick={() => quickToggleComplete(todo)}>
                 {todo.completed ? (

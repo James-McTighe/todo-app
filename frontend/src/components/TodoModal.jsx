@@ -50,6 +50,8 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
               >
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
+                <option value="Blocked">Blocked</option>
+                <option value="Awaiting Review">Awaiting Review</option>
                 <option value="Done">Done</option>
               </select>
             </div>
