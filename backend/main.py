@@ -32,7 +32,6 @@ def get_todos(db: Session = Depends(get_db)):
 def create_todo(todo_in: TodoCreate, db: Session = Depends(get_db)):
     new_todo = models.DBTodo(
         title=todo_in.title, 
-        completed=False,
         status=todo_in.status,
         blockers=todo_in.blockers,
         notes=todo_in.notes
@@ -50,7 +49,6 @@ def update_todo(todo_id: int, todo_in: TodoUpdate, db: Session = Depends(get_db)
         raise HTTPException(status_code=404, detail="Todo not found")
     
     todo.title = todo_in.title
-    todo.completed = todo_in.completed
     todo.status = todo_in.status
     todo.blockers = todo_in.blockers
     todo.notes = todo_in.notes

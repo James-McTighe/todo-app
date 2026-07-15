@@ -5,7 +5,6 @@ from typing import List, Optional
 class TodoResponse(BaseModel):
     id: int
     title: str
-    completed: bool
     status: str
     blockers: Optional[str] = None
     notes: Optional[str] = None
@@ -18,10 +17,10 @@ class TodoCreate(BaseModel):
     status: Optional[str] = "Not Started"
     blockers: Optional[str] = ""
     notes: Optional[str] = ""
+    due_date: date = None
 
 class TodoUpdate(BaseModel):
     title: str
-    completed: bool
     status: str
     blockers: Optional[str] = ""
     notes: Optional[str] = ""

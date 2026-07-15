@@ -6,7 +6,6 @@ class DBTodo(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    completed = Column(Boolean, default=False)
     status = Column(String, nullable=False, default="Not Started")
     blockers = Column(String, nullable=True)
     notes = Column(String, nullable=True)
