@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import date
 
 # Pydantic schemas for API validation
 class TodoResponse(BaseModel):
