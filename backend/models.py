@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Date
 from database import Base
 
 class DBTodo(Base):
@@ -9,3 +9,4 @@ class DBTodo(Base):
     status = Column(String, nullable=False, default="Not Started")
     blockers = Column(String, nullable=True)
     notes = Column(String, nullable=True)
+    due_date = Column(Date, nullable=True)
