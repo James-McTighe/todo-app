@@ -38,6 +38,27 @@ export default function TodoItem({ todo, onEditClick, onDelete }) {
   // Fetch styling based on the status
   const colors = STATUS_COLORS[todo.status] || STATUS_COLORS['To Do'];
 
+  const formatToDdMmmYyyy = (dateString) => {
+    if (!dateString) return '';
+
+    // Expecting standard HTML format: "YYYY-MM-DD"
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return dateString; // Fallback if format is unexpected
+
+    const year = parts[0];
+    const monthIndex = parseInt(parts[1], 10) - 1;
+    const day = parts[2];
+
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+
+    const monthName = months[monthIndex] || parts[1];
+
+    return `${day}-${monthName}-${year}`;
+  };
+
   return (
     <div className={`flex flex-col p-4 mb-3 border rounded-lg transition-all duration-200 hover:-translate-y-1 hover:border-blue-500 ${colors.bg} ${colors.border}`}>
       <div className="flex items-center justify-between">
@@ -54,9 +75,16 @@ export default function TodoItem({ todo, onEditClick, onDelete }) {
           <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${colors.badge}`}>
             {todo.status}
           </span>
-          
+
+          {/* Due Date */}
+          {todo.due_date && (
+            <span className='text-s text-gray-600 bg-gray-100 px-2 py-1 rounded'>
+              Due: {formatToDdMmmYyyy(todo.due_date)}
+            </span>
+          )}
+
           {/* Edit Button */}
-          <button 
+          <button
             onClick={() => onEditClick(todo)}
             className="text-gray-400 hover:text-blue-600 p-1 rounded transition-colors"
           >
@@ -64,7 +92,7 @@ export default function TodoItem({ todo, onEditClick, onDelete }) {
           </button>
 
           {/* Delete Button */}
-          <button 
+          <button
             onClick={() => onDelete(todo.id)}
             className="text-gray-400 hover:text-red-600 p-1 rounded transition-colors"
           >

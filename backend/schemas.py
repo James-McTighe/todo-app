@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import List, Optional
-from datetime import date
 
 # Pydantic schemas for API validation
 class TodoResponse(BaseModel):
@@ -9,7 +8,7 @@ class TodoResponse(BaseModel):
     status: str
     blockers: Optional[str] = None
     notes: Optional[str] = None
-    due_date: date = None
+    due_date: Optional[str] = None
 
     class Config:
         from_attributes = True  # Allows Pydantic to read SQLAlchemy models
@@ -19,11 +18,11 @@ class TodoCreate(BaseModel):
     status: Optional[str] = "Not Started"
     blockers: Optional[str] = ""
     notes: Optional[str] = ""
-    due_date: date = None
+    due_date: Optional[str] = None
 
 class TodoUpdate(BaseModel):
     title: str
     status: str
     blockers: Optional[str] = ""
     notes: Optional[str] = ""
-    due_date: date = None
+    due_date: Optional[str] = None

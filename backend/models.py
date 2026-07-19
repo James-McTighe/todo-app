@@ -9,4 +9,4 @@ class DBTodo(Base):
     status = Column(String, nullable=False, default="Not Started")
     blockers = Column(String, nullable=True)
     notes = Column(String, nullable=True)
-    due_date = Column(Date, nullable=True)
+    due_date = Column(String, nullable=True)

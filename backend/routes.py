@@ -20,7 +20,8 @@ def create_todo(todo_in: TodoCreate, db: DbSession):
         title=todo_in.title, 
         status=todo_in.status,
         blockers=todo_in.blockers,
-        notes=todo_in.notes
+        notes=todo_in.notes,
+        due_date=todo_in.due_date
     )
     db.add(new_todo)
     db.commit()
@@ -38,6 +39,7 @@ def update_todo(todo_id: int, todo_in: TodoUpdate, db: DbSession):
     todo.status = todo_in.status
     todo.blockers = todo_in.blockers
     todo.notes = todo_in.notes
+    todo.due_date = todo_in.due_date
     
     db.commit()
     db.refresh(todo)

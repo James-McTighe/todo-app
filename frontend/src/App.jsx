@@ -6,7 +6,7 @@ import TodoItem from './components/TodoItem.jsx';
 const API_URL = 'http://localhost:8000/todos';
 
 // Blank template state for establishing new todo structures
-const initialTodoState = { title: '', status: 'To Do', blockers: '', notes: '', completed: false };
+const initialTodoState = { title: '', status: 'To Do', blockers: '', notes: '', completed: false, due_date: '' };
 
 export default function App() {
   const [todos, setTodos] = useState([]);

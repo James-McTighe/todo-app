@@ -5,28 +5,28 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
   if (!isOpen || !todo) return null;
 
   // Determine if we are creating a new task or editing an existing one
-  const isEditing = !!todo.id; 
+  const isEditing = !!todo.id;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 flex items-center justify-center z-50 p-4 translate-x-120"
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-white w-200 border border-blue-500 rounded-xl shadow-xl p-6 relative animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()} // Prevents accidental closing when clicking inside form
       >
-        <button 
-          onClick={onClose} 
+        <button
+          onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 cursor-pointer"
         >
           <X size={20} />
         </button>
-        
+
         <h3 className="text-lg font-bold text-gray-900 mb-4">
           {isEditing ? 'Edit Task Details' : 'Add New Task'}
         </h3>
-        
+
         <form onSubmit={onSave} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-gray-800 uppercase tracking-wider mb-1">Task Title</label>
@@ -56,16 +56,16 @@ export default function TodoModal({ isOpen, todo, onClose, onChange, onSave }) {
               </select>
             </div>
 
-            <div className="flex items-end pb-2">
-              <label className="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={todo.completed || false}
-                  onChange={(e) => onChange({ ...todo, completed: e.target.checked })}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
-                />
-                <span>Mark Completed</span>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Due Date
               </label>
+              <input
+                type="date"
+                value={todo.due_date || ''}
+                onChange={(e) => onChange({ ...todo, due_date: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           </div>
 
