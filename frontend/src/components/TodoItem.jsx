@@ -59,6 +59,30 @@ export default function TodoItem({ todo, onEditClick, onDelete }) {
     return `${day}-${monthName}-${year}`;
   };
 
+  const getDueDateColorClass = (dateString) => {
+    if (!dateString) return 'text-gray-500 bg-gray-100'; // Default styling if no due date
+
+    // Parse target date and current date (ignoring times for accurate day calculation)
+    const targetDate = new Date(`${dateString}T00:00:00`);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Calculate the difference in milliseconds and convert to days
+    const timeDiff = targetDate.getTime() - today.getTime();
+    const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    if (daysRemaining < 0) {
+      // Overdue / Elapsed
+      return 'text-red-700 bg-red-100 border border-red-200';
+    } else if (daysRemaining <= 30) {
+      // Within 30 days
+      return 'text-yellow-700 bg-yellow-100 border border-yellow-200';
+    }
+
+    // Fallback for more than 30 days out
+    return 'text-green-700 bg-green-100 border border-green-200';
+  };
+
   return (
     <div className={`flex flex-col p-4 mb-3 border rounded-lg transition-all duration-200 hover:-translate-y-1 hover:border-blue-500 ${colors.bg} ${colors.border}`}>
       <div className="flex items-center justify-between">
@@ -78,7 +102,7 @@ export default function TodoItem({ todo, onEditClick, onDelete }) {
 
           {/* Due Date */}
           {todo.due_date && (
-            <span className='text-s text-gray-600 bg-gray-100 px-2 py-1 rounded'>
+            <span className={ `text-s px-2 py-1 rounded ${getDueDateColorClass(todo.due_date)}` }>
               Due: {formatToDdMmmYyyy(todo.due_date)}
             </span>
           )}
